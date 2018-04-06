@@ -1,9 +1,10 @@
 module.exports = {
-  presets: [['env', {modules: false}], 'react'],
+  presets: [['env', {modules: 'commonjs'}], 'react'],
   plugins: [
     'syntax-dynamic-import',
     'transform-class-properties',
     'transform-object-rest-spread',
+    'dynamic-import-node',
   ],
 }
 
