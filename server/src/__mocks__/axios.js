@@ -1,2 +1,4 @@
 const defaultResponse = {data: {}}
-module.exports = {post: jest.fn(() => Promise.resolve(defaultResponse))}
+module.exports = {
+  post: jest.fn().mockImplementation(() => Promise.resolve(defaultResponse)),
+}

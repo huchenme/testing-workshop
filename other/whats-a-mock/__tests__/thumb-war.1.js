@@ -7,16 +7,24 @@ test('returns winner', () => {
   // that keeps track of how often it's called and
   // the arguments it's called with (Hint #1)
   // eslint-disable-next-line import/namespace
-  utils.getWinner = (p1, p2) => p2
+  utils.getWinner = (...args) => {
+    utils.getWinner.mock.calls.push(args)
+    return args[1]
+  }
+  utils.getWinner.mock = {calls: []}
 
   const winner = thumbWar('Ken Wheeler', 'Kent C. Dodds')
   expect(winner).toBe('Kent C. Dodds')
   // add an assertion for how many times the getWinner function
   // was supposed to be called (2 times) (Hint #2)
+  expect(utils.getWinner.mock.calls).toHaveLength(2)
   //
   // add another assertion that every time it was called
   // it was called with the right arguments: 'Ken Wheeler', 'Kent C. Dodds'
   // (Hint #3)
+  utils.getWinner.mock.calls.forEach(call => {
+    expect(call).toEqual(['Ken Wheeler', 'Kent C. Dodds'])
+  })
 
   // eslint-disable-next-line import/namespace
   utils.getWinner = originalGetWinner

@@ -1,10 +1,14 @@
 import thumbWar from '../thumb-war'
 // import the utils module (see hint #1 at the bottom of the file)
+import * as utils from '../utils'
 
 test('returns winner', () => {
   // keep track of the original `getWinner` utility function (see hint #2)
+  const originalGetWinner = utils.getWinner
   // overwrite the utils.getWinner function with
   // our own that always returns the second player (see hint #3)
+  // eslint-disable-next-line import/namespace
+  utils.getWinner = (player1, player2) => player2
 
   const winner = thumbWar('Ken Wheeler', 'Kent C. Dodds')
   // change this assertion to be more for a specific player
@@ -13,6 +17,8 @@ test('returns winner', () => {
 
   // restore the originalGetWinner function so other tests don't break
   // (see hint #5)
+  // eslint-disable-next-line import/namespace
+  utils.getWinner = originalGetWinner
 })
 
 /*

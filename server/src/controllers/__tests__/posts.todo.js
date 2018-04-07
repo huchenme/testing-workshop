@@ -1,7 +1,15 @@
-// import * as postsController from '../posts.todo'
-// import db from '../../utils/db'
 // eslint-disable-next-line no-unused-vars
 import {initDb, generate} from 'til-server-test-utils'
+import db from '../../utils/db'
+import {getPosts, getPost} from '../posts.todo'
+
+function setup() {
+  const req = {}
+  const res = {
+    json: jest.fn(),
+  }
+  return {req, res}
+}
 
 // I'll give this one to you. You want the database to be fresh
 // the initDb function will initialize the database with random users and posts
@@ -9,7 +17,19 @@ import {initDb, generate} from 'til-server-test-utils'
 // (For example, getPosts should return all the posts in the DB)
 beforeEach(() => initDb())
 
+const getFirstArg = res => {
+  const firstCall = res.json.mock.calls[0]
+  return firstCall[0]
+}
+
 test('getPosts returns all posts in the database', async () => {
+  const {req, res} = setup()
+  await getPosts(req, res)
+  expect(res.json).toHaveBeenCalledTimes(1)
+  const {posts} = getFirstArg(res)
+  expect(posts.length).toBeGreaterThan(1)
+  const actualPosts = await db.getPosts()
+  expect(posts).toEqual(actualPosts)
   // here you'll need to Arrange, Act, and Assert
   // Arrange: set up the req and res mock objects
   // Act: Call getPosts on the postsController with the req and res
@@ -19,6 +39,15 @@ test('getPosts returns all posts in the database', async () => {
 })
 
 test('getPost returns the specific post', async () => {
+  const testPost = await db.insertPost(generate.postData())
+  const {req, res} = setup()
+  req.params = {id: testPost.id}
+  await getPost(req, res)
+  expect(res.json).toHaveBeenCalledTimes(1)
+  const {post} = getFirstArg(res)
+  const actuaPost = await db.getPost(testPost.id)
+  expect(post).toEqual(actuaPost)
+  expect(actuaPost).toEqual(testPost)
   // here you'll need to Arrange, Act, and Assert
   // Arrange:
   //   - create a test post and insert it into the database using `await db.insertPost(generate.postData())`
@@ -47,8 +76,8 @@ test('updatePost updates the post with the given changes', async () => {
 /*
 http://ws.kcd.im/?ws=Testing&e=postsController&em=
 */
-test.skip('I submitted my elaboration and feedback', () => {
-  const submitted = false // change this when you've submitted!
+test('I submitted my elaboration and feedback', () => {
+  const submitted = true // change this when you've submitted!
   expect(submitted).toBe(true)
 })
 ////////////////////////////////

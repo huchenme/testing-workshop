@@ -10,9 +10,9 @@
     "test": "jest --coverage",
     "test:watch": "jest --watch",
     "cy:open": "cypress open",
+    "cy:run": "cypress run",
     "test:e2e:dev": "npm-run-all --parallel --race dev cy:open",
-    "test:e2e": "npm-run-all --parallel --race start cy:run",
-    "cy:run": "cypress run"
+    "test:e2e": "npm-run-all --parallel --race start cy:run"
   },
   "keywords": [],
   "author": "Kent C. Dodds <kent@doddsfamily.us> (http://kentcdodds.com/)",
